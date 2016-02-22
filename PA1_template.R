@@ -1,96 +1,49 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
-
-# Loading and preprocessing the data
-
-Load libraries
-
-```{
 library(knitr)
 opts_chunk$set(echo = TRUE)
+
 library(dplyr)
+
 library(lubridate)
 library(ggplot2)
-}
-```
-Load the data 
-```{
-data <- read.csv("data/activity.csv", header = TRUE, sep =",", colClasses = c("numeric", "character","integer"))
-}
 
-```
-Process/transform the data
-```{
+data <- read.csv("data/activity.csv", header = TRUE, sep =",", colClasses = c("numeric", "character",
+                                                                               "integer"))
+
 data$date <- ymd(data$date)
-}
-```
-Check the data with str() and head():
-```{
+
 str(data)
+
 head(data)
-}
-```
 
-# What is mean total number of steps taken per day?
-
-Calculate the total number of steps per day using dplyr and group by date:
-```{
 steps <- data %>%
         filter(!is.na(steps)) %>%
         group_by(date) %>%
         summarize(steps = sum(steps)) %>%
         print
-}
 
-```
-1. Make a histogram
-```{
 ggplot(steps, aes(x = steps)) +
         geom_histogram(fill = "firebrick", binwidth = 1000) +
         labs(title = "Histogram of Steps per day", x = "Steps per day", y = "Frequency")
-}
-```
-2. Calculate the mean and median of the total number of steps taken per day:
-```{
+
 mean_steps <- mean(steps$steps, na.rm = TRUE)
 median_steps <- median(steps$steps, na.rm = TRUE)
+
 mean_steps
+
 median_steps
-}
-```
 
-# What is the average daily activity pattern?
-
-Calculate the average number of steps taken in each 5-minute interval per day using dplyr and group by interval:
-```{
 interval <- data %>%
         filter(!is.na(steps)) %>%
         group_by(interval) %>%
         summarize(steps = mean(steps))
-}
-```
-1. making the time series of the 5-minute interval and average steps taken:
-```{
+
 ggplot(interval, aes(x=interval, y=steps)) +
         geom_line(color = "firebrick")
-}
-```
 
-2. find out the maximum steps
-```{
 interval[which.max(interval$steps),]
-}
-```
 
-## Imputing missing values
-
-Calculate and report the total number of missing values in the dataset
-```{
 sum(is.na(data$steps))
+
 data_full <- data
 nas <- is.na(data_full$steps)
 avg_interval <- tapply(data_full$steps, data_full$interval, mean, na.rm=TRUE, simplify=TRUE)
@@ -113,12 +66,6 @@ median_steps_full <- median(steps_full$steps, na.rm = TRUE)
 mean_steps_full
 median_steps_full
 
-}
-```
-
-## Are there differences in activity patterns between weekdays and weekends?
-
-```{
 data_full <- mutate(data_full, weektype = ifelse(weekdays(data_full$date) == "Saturday" | weekdays(data_full$date) == "Sunday", "weekend", "weekday"))
 data_full$weektype <- as.factor(data_full$weektype)
 head(data_full)
@@ -130,6 +77,4 @@ s <- ggplot(interval_full, aes(x=interval, y=steps, color = weektype)) +
         geom_line() +
         facet_wrap(~weektype, ncol = 1, nrow=2)
 print(s)
-}
-```
 
