@@ -12,9 +12,10 @@ library(lubridate)
 library(ggplot2)
 }
 ```
+
 Load the data 
 ```{
-data <- read.csv("data/activity.csv", header = TRUE, sep =",", colClasses = c("numeric", "character","integer"))
+data <- read.csv("activity.csv", header = TRUE, sep =",", colClasses = c("numeric", "character","integer"))
 }
 
 ```
@@ -49,6 +50,8 @@ ggplot(steps, aes(x = steps)) +
         labs(title = "Histogram of Steps per day", x = "Steps per day", y = "Frequency")
 }
 ```
+
+
 2. Calculate the mean and median of the total number of steps taken per day:
 ```{
 mean_steps <- mean(steps$steps, na.rm = TRUE)

@@ -6,7 +6,7 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 
-data <- read.csv("data/activity.csv", header = TRUE, sep =",", colClasses = c("numeric", "character",
+data <- read.csv("activity.csv", header = TRUE, sep =",", colClasses = c("numeric", "character",
                                                                                "integer"))
 
 data$date <- ymd(data$date)
